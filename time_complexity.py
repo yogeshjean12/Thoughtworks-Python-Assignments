@@ -63,8 +63,6 @@ class Time_complexity:
 lst=[3,5,8,4,9,1]
 t1=Time_complexity(lst)
 t1.bubble_sort()
-#t1.logarithmic_time()
-#t1.linear_time()
 #t1.binary_search(9)
 #t1.quasilinear_time()
 #t1.linear_search(1)
