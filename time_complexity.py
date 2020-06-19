@@ -12,7 +12,7 @@ class Time_complexity:
     def linear_search(self, value):  #linear_time=O(n)
         for index in range(len(self.lst)):
             if value == self.lst[index]:
-                print(index)
+                print('{} found in index {}'.format(value,index))
                 return
         print('Value not found in the list')
 
@@ -24,12 +24,14 @@ class Time_complexity:
                 if self.lst[i] > self.lst[i + 1]:
                     self.lst[i], self.lst[i + 1] = self.lst[i + 1], self.lst[i]
                     swapped = True
-        print(self.lst)
+        return self.lst
 
     def binary_search(self,value):  #logarithmic_time=O(log n)
         n = len(self.lst)
         left = 0
         right = n - 1
+        self.lst=t1.bubble_sort()
+
         while left <= right:
             middle = (left + right) // 2
             if value < self.lst[middle]:
@@ -62,9 +64,9 @@ class Time_complexity:
 
 lst=[3,5,8,4,9,1]
 t1=Time_complexity(lst)
-t1.bubble_sort()
-#t1.binary_search(9)
-#t1.quasilinear_time()
-#t1.linear_search(1)
+print(t1.bubble_sort())
+t1.binary_search(9)
+t1.quasilinear_time()
+t1.linear_search(1)
 
 
