@@ -1,16 +1,25 @@
 
 class Product:
 
+    ''' Product details '''
+
+    def __init__(self, id_no, name, price, category, tax):
+        self.id_no = id_no
+        self.name = name
+        self.price = price
+        self.category = category
+        self.tax = tax
+
+class Tax:
+
+    ''' Product tax report '''
+
     def __init__(self, id_no, name, price, category):
         self.id_no = id_no
         self.name = name
         self.price = price
         self.category = category
 
-class Tax(Product):
-
-    def __init__(self, id_no, name, price, category):
-        super().__init__(id_no, name, price, category)
 
     def basic_tax(self):
         if self.category == 'dairy' and self.price > 1000:
@@ -37,8 +46,8 @@ class Tax(Product):
 
         return self.total_tax
 
+
 def product_details():
-    print('Printing all items tax amount...')
     dairy = {'butter': 1200, 'cheese': 750,'milk': 750,'ice cream': 2500}
     textile = {'t-shirt': 450,'shirt': 900,'pant': 2000,'saree': 1200}
     produce = {'potatoes': 100, 'tomatoes': 300,'carrots': 600,'cucumbers':250}
@@ -48,6 +57,7 @@ def product_details():
     product_with_id = {}
 
     def all_tax():
+        print('Printing all items tax amount...')
         id_no = 1
         for category in categories:
             for item in category:
@@ -69,7 +79,7 @@ def product_details():
             print('sry, product not available')
             return
 
-        print('Id no:{}.{} tax amount is {}rupees '.format(product_with_id[item], item, product.grand_tax()) )
+        print('Id no:{}.{} tax amount is {} rupees '.format(product_with_id[item], item, product.grand_tax()) )
 
     all_tax()
 
