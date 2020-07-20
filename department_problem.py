@@ -8,9 +8,6 @@ class Student:
         self.subject_names = subject_names
         self.dept = dept
 
-    def display_student_details(self):
-        print('Name: {}\n Id_no: {}\n Department: {}\n subject taken: {}\n'.format(self.name, self.id_no, self.dept, self.subject_names))
-
     def get_student_department(self):
         return self.dept
 
