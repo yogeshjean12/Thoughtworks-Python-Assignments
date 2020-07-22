@@ -4,22 +4,10 @@ class Type:
         self.type = type
         self.type_cost = type_cost
 
-    def get_type_name(self):
-        return self.type
-
-    def get_type_cost(self):
-        return self.type_cost
-
 class Flavour:
     def __init__(self, flavour, flavour_cost):
         self.flavour = flavour
         self.flavour_cost = flavour_cost
-
-    def get_flavour_name(self):
-        return self.flavour
-
-    def get_flavour_cost(self):
-        return self.flavour_cost
 
 class Topping:
     def __init__(self, topping, topping_cost):
@@ -34,26 +22,27 @@ class Topping:
 
 class IceCream:
     '''Ice cream details'''
+
     def __init__(self, type, type_cost, flavour, flavour_cost):
         self.obj_type = Type(type, type_cost)
         self.obj_flavour = Flavour(flavour, flavour_cost)
 
     def get_ice_cream_name(self):
-        return self.obj_flavour.get_flavour_name() + self.obj_type.get_type_name()
+        return self.obj_flavour.flavour + self.obj_type.type
 
     def get_ice_cream_cost(self):
-        return self.obj_type.type_cost + self.obj_flavour.get_flavour_cost()
+        return self.obj_type.type_cost + self.obj_flavour.flavour_cost
 
 def display_menu_card(ice_cream_obj):
     print('                      MENU CARD\n')
     for ice_cream in ice_cream_obj:
-        print('       {} {} ice cream price is : {} rupees'.format(ice_cream.obj_flavour.get_flavour_name(), ice_cream.obj_type.get_type_name(), ice_cream.get_ice_cream_cost()))
+        print('       {} {} ice cream price is : {} rupees'.format(ice_cream.obj_flavour.flavour, ice_cream.obj_type.type, ice_cream.get_ice_cream_cost()))
     print('\n                       _ _ _ _ _ _')
 
 def take_order(ice_cream_obj, topping_obj_list):
     try:
         ice_cream_flavour, ice_cream_type = input('\nWhich ice cream you want? (Eg.chocolate cup): ').lower().strip().split()
-        quantity = int(input('How many {} {} ice cream you want? (Eg.2) : '.format(ice_cream_flavour, ice_cream_type).strip()))
+        quantity = int(input('How many {} {} ice cream you want? (Eg.2) : '.format(ice_cream_flavour, ice_cream_type)))
         for ice_cream in ice_cream_obj:
             if ice_cream_flavour == 'chocolate':
                 if ice_cream.get_ice_cream_name() == ice_cream_flavour+ice_cream_type:
@@ -61,23 +50,32 @@ def take_order(ice_cream_obj, topping_obj_list):
                     if option == 'y':
                         print('\nAvailable toppings are: ')
                         for item in topping_obj_list:
-                            print('{} price is: {} rupees'.format(item.get_topping_name(), item.get_topping_cost()))
+                            print('{} price is: {} rupees'.format(item.topping, item.topping_cost))
                         topping = input('\nwhich one do you want? (Eg.caramel) : ').lower().strip()
                         for item1 in topping_obj_list:
-                            if topping == item1.get_topping_name():
-                                return '\n{} {} {} ice cream with {} toppings price is: {} rupees'.format(quantity,  ice_cream_flavour, ice_cream_type, topping,(ice_cream.get_ice_cream_cost() + item1.get_topping_cost()) * quantity)
+                            if topping == item1.topping:
+                                return quantity,  ice_cream_flavour, ice_cream_type, topping
                         else:
-                            return '\nWrong input'
+                            return 'Wrong input'
                     else:
-                        return '\n{} {} {} ice cream price is: {} rupees'.format(quantity,  ice_cream_flavour, ice_cream_type, ice_cream.get_ice_cream_cost() * quantity)
-
-            elif (ice_cream.obj_flavour.get_flavour_name() + ice_cream.obj_type.get_type_name()) == (ice_cream_flavour + ice_cream_type):
-                return '\n{} {} {} ice cream price is: {} rupees'.format(quantity,  ice_cream_flavour, ice_cream_type, ice_cream.get_ice_cream_cost() * quantity)
+                        return quantity,  ice_cream_flavour, ice_cream_type
+            elif (ice_cream.obj_flavour.flavour + ice_cream.obj_type.type) == (ice_cream_flavour + ice_cream_type):
+                return quantity,  ice_cream_flavour, ice_cream_type
         else:
-            return '\nWrong input'
+            return 'Wrong input'
     except Exception as e:
-        print('\nError occured, the exception was: ', e)
-        return '\n Error '
+        print('\nError occurred, the exception was: ', e)
+        return 'Error'
+
+def billing(order, ice_cream_obj_list, topping_obj_list):
+    for ice_cream in ice_cream_obj_list:
+        if len(order) == 4:
+            if ice_cream.get_ice_cream_name() == order[1] + order[2]:
+                for item1 in topping_obj_list:
+                    if item1.topping == order[3]:
+                        return '\n{} {} {} ice cream with {} topping price is: {} rupees'.format(order[0], order[1], order[2], order[3], (ice_cream.get_ice_cream_cost() + item1.topping_cost) * order[0])
+        elif ice_cream.get_ice_cream_name() == order[1] + order[2]:
+            return '\n{} {} {} ice cream price is: {} rupees'.format(order[0], order[1], order[2], ice_cream.get_ice_cream_cost() * order[0])
 
 ice_cream1 = IceCream('cup', 100, 'chocolate', 250)
 ice_cream2 = IceCream('cup', 100, 'vanilla', 150)
@@ -96,5 +94,9 @@ topping3 = Topping('nuts', 40)
 topping_obj_list = [topping1, topping2, topping3]
 
 display_menu_card(ice_cream_obj_list)
-bill = take_order(ice_cream_obj_list, topping_obj_list)
-print(bill)
+order = take_order(ice_cream_obj_list, topping_obj_list)
+if order == 'Wrong input' or order == 'Error':
+    print(order)
+else:
+    bill = billing(order, ice_cream_obj_list, topping_obj_list)
+    print(bill)
