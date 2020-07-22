@@ -1,6 +1,5 @@
 
 class Type:
-
     def __init__(self, type, type_cost):
         self.type = type
         self.type_cost = type_cost
@@ -12,7 +11,6 @@ class Type:
         return self.type_cost
 
 class Flavour:
-
     def __init__(self, flavour, flavour_cost):
         self.flavour = flavour
         self.flavour_cost = flavour_cost
@@ -24,7 +22,6 @@ class Flavour:
         return self.flavour_cost
 
 class Topping:
-
     def __init__(self, topping, topping_cost):
         self.topping = topping
         self.topping_cost = topping_cost
@@ -36,9 +33,7 @@ class Topping:
         return self.topping
 
 class IceCream:
-
     '''Ice cream details'''
-
     def __init__(self, type, type_cost, flavour, flavour_cost):
         self.obj_type = Type(type, type_cost)
         self.obj_flavour = Flavour(flavour, flavour_cost)
@@ -49,13 +44,11 @@ class IceCream:
     def get_ice_cream_cost(self):
         return self.obj_type.type_cost + self.obj_flavour.get_flavour_cost()
 
-
 def display_menu_card(ice_cream_obj):
     print('                      MENU CARD\n')
     for ice_cream in ice_cream_obj:
         print('       {} {} ice cream price is : {} rupees'.format(ice_cream.obj_flavour.get_flavour_name(), ice_cream.obj_type.get_type_name(), ice_cream.get_ice_cream_cost()))
     print('\n                       _ _ _ _ _ _')
-
 
 def take_order(ice_cream_obj, topping_obj_list):
     try:
