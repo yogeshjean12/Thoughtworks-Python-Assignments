@@ -3,8 +3,8 @@ class Author:
     '''Author details'''
     def __init__(self, author_name, author_age, author_nationality):
         self.author_name = author_name
-        self.author_age = author_age
-        self.author_nationality = author_nationality
+        self.__author_age = author_age
+        self.__author_nationality = author_nationality
 
 class Book:
     '''Book details'''
@@ -13,16 +13,17 @@ class Book:
         self.book_price = book_price
         self.obj_author = Author(author_name, author_age, author_nationality)
 
-def display_all_books(book_obj_list):
-    print('        Available books \n')
+def display_price_of_all_books(book_obj_list):
+    total_price = 0
     for book in book_obj_list:
-        print('Book name: {}\nBook price: {}rupees\nAuthor name: {}\n_ _ _ _'.format(book.book_name, book.book_price, book.obj_author.author_name))
+        total_price += book.book_price
+    print('\nPrice of all books: {}rupees'.format(total_price))
 
 def affordable_books(book_obj_list):
     print('\n      Affordable books \n')
     for book in book_obj_list:
         if book.book_price < 1000:
-            print('Book name: {}\nBook price: {}\n_ _ _ _'.format(book.book_name, book.book_price))
+            print('Book name: {}\nAuthor name: {}\n_ _ _ _'.format(book.book_name,book.obj_author.author_name))
 
 def books_written_by_particular_author(book_obj_list, name):
     try:
@@ -46,7 +47,7 @@ book5 = Book('C++', 1499, 'Bjarne Stroustrup', 69, 'danish')
 book6 = Book('Generic Java', 599, 'Martin Odersky', 61, 'german')
 book_obj_list = [book1, book2, book3, book4, book5, book6]
 
-display_all_books(book_obj_list)
+display_price_of_all_books(book_obj_list)
 affordable_books(book_obj_list)
 author_name_input= input('\nTo know how many books written by a particular author\nEnter the author name: ').strip().title()
 no_of_books = books_written_by_particular_author(book_obj_list, author_name_input)
