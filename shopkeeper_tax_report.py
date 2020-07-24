@@ -1,101 +1,63 @@
 
-class Product:
-
-    ''' Product details '''
-
-    def __init__(self, id_no, name, price, category, tax):
-        self.id_no = id_no
-        self.name = name
-        self.price = price
-        self.category = category
-        self.tax = tax
-
 class Tax:
-
-    ''' Product tax report '''
-
+    '''Tax details'''
+    normal_price_limit = 500
+    dairy_price_limit = 1000
+    tax = 0
+    high_tax = 0.05
+    normal_tax = 0.02
+    dairy_tax = 0.03
+    extra_tax = 0.01
     def __init__(self, id_no, name, price, category):
         self.id_no = id_no
         self.name = name
         self.price = price
         self.category = category
 
-
-    def basic_tax(self):
-        if self.category == 'dairy' and self.price > 1000:
-            self.tax = self.price * 0.03
-        elif self.category == 'dairy' and self.price < 1000:
-            self.tax = 0
-        elif self.price > 500:
-            self.tax = self.price * 0.05
-        elif self.price < 500:
-            self.tax = self.price * 0.02
+    def __basic_tax(self):
+        if self.category == 'dairy' and self.price > self.dairy_price_limit:
+            self.tax = self.price * self.dairy_tax
+        elif self.category == 'dairy' and self.price < self.dairy_price_limit:
+            self.tax = self.tax
+        elif self.price > self.normal_price_limit:
+            self.tax = self.price * self.high_tax
+        elif self.price < self.normal_price_limit:
+            self.tax = self.price * self.normal_tax
         else:
-            self.tax = 0
-
+            return self.tax
         return self.tax
 
-    def extra_tax(self):
-        return self.price * 0.01
+    def __extra_tax(self):
+        return self.price * self.extra_tax
 
     def grand_tax(self):
         if self.category == 'textile':
-            self.total_tax = Tax.basic_tax(self) + Tax.extra_tax(self)
+            self.total_tax = Tax.__basic_tax(self) + Tax.__extra_tax(self)
         else:
-            self.total_tax = Tax.basic_tax(self)
-
+            self.total_tax = Tax.__basic_tax(self)
         return self.total_tax
 
+class Product:
+    '''Product details'''
+    def __init__(self, id_no, name, price, category):
+        self.id_no = id_no
+        self.name = name
+        self.price = price
+        self.category = category
+        self.obj_tax = Tax(id_no, name, price, category)
 
-def product_details():
-    dairy = {'butter': 1200, 'cheese': 750,'milk': 750,'ice cream': 2500}
-    textile = {'t-shirt': 450,'shirt': 900,'pant': 2000,'saree': 1200}
-    produce = {'potatoes': 100, 'tomatoes': 300,'carrots': 600,'cucumbers':250}
-    home_needs = {'towel': 600,'chair': 1500,'blanket': 1000,'air conditioner': 40000}
-    categories = [dairy, textile, produce, home_needs]
-    list_of_products = []
-    product_with_id = {}
+def get_all_tax_amount(product_obj_list):
+    for product in product_obj_list:
+        print('product {} has tax amount of: {} rupees'.format(product.name, product.obj_tax.grand_tax()))
 
-    def all_tax():
-        print('Printing all items tax amount...')
-        id_no = 1
-        for category in categories:
-            for item in category:
-                product_with_id.update({item: id_no})
-                id_no += 1
-                list_of_products.append(item)
-                get_tax_amount(item)
+product1 = Product(1, 'butter', 1200, 'dairy')
+product2 = Product(2, 'cheese', 750, 'dairy')
+product3 = Product(3, 'shirt', 900, 'textile')
+product4 = Product(4, 'saree', 2000, 'textile')
+product5 = Product(5, 'potatoes', 100, 'produce')
+product6 = Product(6, 'tomatoes', 300, 'produce')
+product7 = Product(7, 'towel', 600, 'home_needs')
+product8 = Product(8, 'chair', 1500, 'home_needs')
+product_obj_list = [product1, product2, product3, product4, product5, product6, product7, product8]
 
-    def get_tax_amount(item):
-        if item in dairy:
-            product = Tax(product_with_id[item], item, dairy[item], 'dairy')
-        elif item in textile:
-            product = Tax(product_with_id[item], item, textile[item], 'textile')
-        elif item in produce:
-            product = Tax(product_with_id[item], item, produce[item], 'produce')
-        elif item in home_needs:
-            product = Tax(product_with_id[item], item, home_needs[item], 'home needs')
-        else:
-            print('sry, product not available')
-            return
-
-        print('Id no:{}.{} tax amount is {} rupees '.format(product_with_id[item], item, product.grand_tax()) )
-
-    all_tax()
-
-    user_input1 = input('\nDo you want to know any specific product tax? (y-yes,n-no) type - y/n: ')
-    if user_input1 == 'y':
-        user_input2 = input('Do you want me to display the available items? (y-yes,n-no) type - y/n: ')
-        if user_input2 == 'y':
-            print(list_of_products)
-            name = input('Enter the name of the product: ')
-            get_tax_amount(name)
-            print('Thank you')
-        else:
-            name = input('Enter the name of the product: ')
-            get_tax_amount(name)
-            print('Thank you')
-    else:
-        print('Thank you')
-
-product_details()
+get_all_tax_amount(product_obj_list)
