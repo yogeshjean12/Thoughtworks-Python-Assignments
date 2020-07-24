@@ -1,13 +1,13 @@
 
 class Tax:
     '''Tax details'''
-    normal_price_limit = 500
-    dairy_price_limit = 1000
-    tax = 0
-    high_tax = 0.05
-    normal_tax = 0.02
-    dairy_tax = 0.03
-    extra_tax = 0.01
+    _normal_price_limit = 500
+    _dairy_price_limit = 1000
+    _tax = 0
+    _high_tax = 0.05
+    _normal_tax = 0.02
+    _dairy_tax = 0.03
+    _extra_tax = 0.01
     def __init__(self, id_no, name, price, category):
         self.id_no = id_no
         self.name = name
