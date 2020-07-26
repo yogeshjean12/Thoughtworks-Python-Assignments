@@ -1,15 +1,38 @@
-
 class Range:
     def __init__(self, min_range, max_range):
         self.min_range = min_range
         self.max_range = max_range
 
+    def get_range(self):
+        return '{}-{}'.format(self.min_range, self.max_range)
+
+class Ac:
+    def __init__(self, select_ac,min_range, max_range, price_per_km):
+        self.select_ac = select_ac
+        self.price_per_km = price_per_km
+        self.range = Range(min_range, max_range)
+
+    def get_ac_price(self):
+        return self.price_per_km
+
+class NonAc:
+    def __init__(self, select_ac,min_range, max_range, price_per_km):
+        self.select_ac = select_ac
+        self.price_per_km = price_per_km
+        self.range = Range(min_range, max_range)
+
+    def get_non_ac_price(self):
+        return self.price_per_km
+
 class Vehicle:
     def __init__(self, vehicle_type, max_people_limit, min_range, max_range, select_ac, price_per_km):
         self.vehicle_type = vehicle_type
         self.max_people_limit = max_people_limit
-        self.range = Range(min_range, max_range)
-        self.ac = select_ac
+        self.select_ac = select_ac
+        if select_ac == 'yes':
+            self.ac = Ac(select_ac,  min_range, max_range, price_per_km)
+        else:
+            self.non_ac = NonAc(select_ac,  min_range, max_range, price_per_km)
         self.price_per_km = price_per_km
 
 def display_category():
@@ -20,56 +43,48 @@ def display_category():
             print('{} (Maximum upto {} people)'.format(vehicle.vehicle_type, vehicle.max_people_limit))
             vehicle_type_list.append(vehicle.vehicle_type)
 
-def display_price_menu():
-
-    if vehicle_select in auto1.vehicle_type:
-        print('We have only Ac auto\'s')
-        for vehicle in auto_obj_list:
-            print('{} {} upto {}km price is : {} per km'.format('Ac', vehicle.vehicle_type, vehicle.range.max_range, vehicle.price_per_km))
-        print('\nRide booked successfully')
-    elif vehicle_select in micro1.vehicle_type:
-        if ac_select == 'y':
-            for vehicle in micro_obj_list:
-                if vehicle.ac == 'yes':
-                    print('{} {} upto {}km price is : {} per km'.format('Ac', vehicle.vehicle_type, vehicle.range.max_range, vehicle.price_per_km))
-            print('\nRide booked successfully')
-        elif ac_select == 'n':
-            for vehicle in micro_obj_list:
-                if vehicle.ac == 'no':
-                    print('{} {} upto {}km price is : {} per km'.format('Non-Ac', vehicle.vehicle_type, vehicle.range.max_range, vehicle.price_per_km))
-            print('\nRide booked successfully')
-    elif vehicle_select in xl1.vehicle_type:
-        if ac_select == 'y':
-            for vehicle in xl_obj_list:
-                if vehicle.ac == 'yes':
-                    print('{} {} upto {}km price is : {} per km'.format('Ac', vehicle.vehicle_type, vehicle.range.max_range, vehicle.price_per_km))
-            print('\nRide booked successfully')
-        elif ac_select == 'n':
-            for vehicle in xl_obj_list:
-                if vehicle.ac == 'no':
-                    print('{} {} upto {}km price is : {} per km'.format('Non-Ac', vehicle.vehicle_type, vehicle.range.max_range, vehicle.price_per_km))
-            print('\nRide booked successfully')
+def customer_selection():
+    vehicle_select = input('\nSelect the category from the above list(Eg.micro) : ').lower().strip()
+    for vehicle in vehicle_obj_list:
+        if vehicle_select == vehicle.vehicle_type:
+                if vehicle_select == 'auto':
+                    print('We have only Ac Auto\'s, suggest you to go with Ac auto\n')
+                    ac_select = 'yes'
+                    price_menu(vehicle_select, ac_select)
+                    break
+                else:
+                    ac_select = input('Do you want Ac vehicle? (yes/no): ').strip().lower()
+                price_menu(vehicle_select, ac_select)
+                break
     else:
-        print('Invalid input')
+        print('Wrong input, try again')
+
+def price_menu(vehicle_select, ac_select):
+    for vehicle in vehicle_obj_list:
+        if vehicle_select == vehicle.vehicle_type:
+            if vehicle.select_ac == 'yes':
+                if ac_select == 'yes':
+                    print('Ac {} vehicle range:{}km price is : {}rupees/km'.format(vehicle.vehicle_type, vehicle.ac.range.get_range(), vehicle.ac.get_ac_price()))
+            elif vehicle.select_ac == 'no':
+                if ac_select == 'no':
+                    print('Non-Ac {} vehicle range:{}km price is : {}rupees/km'.format(vehicle.vehicle_type, vehicle.non_ac.range.get_range(), vehicle.non_ac.get_non_ac_price()))
+    print('\nYour ride is booked successfully')
 
 auto1 = Vehicle('auto', 3, 0, 15, 'yes', 10)
 auto2 = Vehicle('auto', 3, 15, 30, 'yes', 8)
 auto3 = Vehicle('auto', 3, 30, 1500, 'yes', 15)
-auto_obj_list = [auto1, auto2, auto3]
 micro1 = Vehicle('micro', 4, 0, 15, 'yes', 12)
 micro2 = Vehicle('micro', 4, 15, 1500, 'yes', 10)
 micro3 = Vehicle('micro', 4, 0, 15, 'no', 14)
 micro4 = Vehicle('micro', 4, 15, 1500, 'no', 12)
-micro_obj_list = [micro1, micro2, micro3, micro4]
 xl1 = Vehicle('xl', 10, 0, 15, 'yes', 14)
 xl2 = Vehicle('xl', 10, 15, 1500, 'yes', 14)
 xl3 = Vehicle('xl', 10, 0, 15, 'no', 15)
 xl4 = Vehicle('xl', 10, 15, 1500, 'no', 15)
-xl_obj_list = [xl1, xl2, xl3, xl4]
-
 vehicle_obj_list = [auto1, auto2, auto3, micro1, micro2, micro3, micro4, xl1, xl2, xl3, xl4]
 
 display_category()
-vehicle_select = input('\nSelect the category (Eg.micro) : ').lower().strip()
-ac_select = input('Do you want Ac? (yes-y/no-n): ').strip().lower()
-display_price_menu()
+customer_selection()
+
+
+
