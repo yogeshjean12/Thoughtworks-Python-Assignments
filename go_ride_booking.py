@@ -1,11 +1,4 @@
 
-class Vehicle(object):
-    def __init__(self, vehicle_type, ac, range):
-        self.vehicle_type = vehicle_type
-        self.ac = ac
-        self.range = range
-
-
 class Micro:
     max_people_limit = 4
     vehicle_type = 'micro'
@@ -17,7 +10,6 @@ class Micro:
          self.price_without_ac = price_without_ac
          self.min_range = min_range
          self.max_range = max_range
-
 
 class Auto:
     max_people_limit = 3
@@ -31,7 +23,6 @@ class Auto:
         self.min_range = min_range
         self.max_range = max_range
 
-
 class Xl:
     max_people_limit = 10
     vehicle_type = 'xl'
@@ -44,11 +35,9 @@ class Xl:
         self.min_range = min_range
         self.max_range = max_range
 
-
 def filter_vehicle(vehicle_select):
     user_vehicle = next((vehicle for vehicle in vehicle_obj_list if vehicle.vehicle_type == vehicle_select), None)
     return user_vehicle
-
 
 def display_category():
     print('We have different categories of vehicle:')
@@ -57,7 +46,6 @@ def display_category():
         if vehicle.vehicle_type not in vehicle_type_list:
             print('{} (Maximum upto {} people)'.format(vehicle.vehicle_type, vehicle.max_people_limit))
             vehicle_type_list.append(vehicle.vehicle_type)
-
 
 def get_user_input():
     while True:
@@ -84,7 +72,8 @@ def get_user_input():
                 print('We have only Ac {}\'s, suggest you to go with Ac vehicle\n'.format(selected_vehicle.vehicle_type))
                 ac_select = 'yes'
                 return selected_vehicle, ac_select
-
+        else:
+            print('Not a valid input')
 
 def price_menu(selected_vehicle, ac_select):
     for vehicle in vehicle_obj_list:
@@ -93,8 +82,11 @@ def price_menu(selected_vehicle, ac_select):
                 print('Ac {} vehicle range: {}-{} price is : {}rupees/km'.format(vehicle.vehicle_type, vehicle.min_range, vehicle.max_range, vehicle.price_with_ac))
             elif ac_select == 'no':
                 print('Non-Ac {} vehicle range: {} price is : {}rupees/km'.format(vehicle.vehicle_type, vehicle.min_range, vehicle.max_range, vehicle.price_without_ac))
-    print('\nYour ride is booked successfully')
-
+    confirmation = input("\nDo u want to book it or not (yes/no):")
+    if confirmation == "yes":
+        print('\nYour ride is booked successfully')
+    else:
+        print("\nBooking canceled")
 
 auto1 = Auto(0, 15, 10)
 auto2 = Auto(15, 30, 8)
