@@ -6,12 +6,7 @@ app = Flask(__name__)
 DATABASE_URL = "postgres+psycopg2://postgres:yogesh5201@localhost/flaskdemo"
 db = create_engine(DATABASE_URL)
 
-
-class Books():
-    id = Column(Integer, primary_key=True)
-    book_name = Column(String(20), unique=True, nullable=True)
-    book_price = Column(Integer, unique=False, nullable=True)
-    author_name = Column(String(20), unique=False, nullable=True)
+class Book():
 
     def __init__(self, book_name, book_price, author_name):
         self.book_name = book_name
