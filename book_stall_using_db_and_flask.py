@@ -1,23 +1,18 @@
 from flask import Flask, request, jsonify
-from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy import create_engine
 
 app = Flask(__name__)
 
-DATABASE_URL = "postgres+psycopg2://postgres:yogesh5201@localhost/flaskdemo"
-db = create_engine(DATABASE_URL)
 
-class Book():
-
-    def __init__(self, book_name, book_price, author_name):
-        self.book_name = book_name
-        self.book_price = book_price
-        self.author_name = author_name
+def connect_db():
+    DATABASE_URL = "postgres+psycopg2://postgres:yogesh5201@localhost/flaskdemo"
+    return create_engine(DATABASE_URL)
 
 
 @app.route('/getbooks', methods=['GET'])
 def get_all_books():
-    books = db.execute('select * from book_stall.books')
-    result = [dict(row) for row in books]
+    res = view()
+    result = [dict(row) for row in res]
     return jsonify(result)
 
 
@@ -27,8 +22,24 @@ def add_book():
         name = request.form['book_name']
         price = request.form['book_price']
         author_name = request.form['author_name']
-        db.execute("INSERT INTO book_stall.books(book_name,book_price,author_name) VALUES('{}','{}','{}')".format(name, price, author_name))
+        insert(name,price,author_name)
         return 'Book added successfully'
+
+
+def view():
+    books = db.execute('select * from book_stall.books')
+    return books.fetchall()
+
+
+def insert(name,price,author_name):
+    db.execute(
+        "INSERT INTO book_stall.books(book_name,book_price,author_name)"
+        " VALUES('{}','{}','{}')"
+        .format(name, price,author_name)
+        )
+    return
+
+db = connect_db()
 
 
 if __name__ == '__main__' :
