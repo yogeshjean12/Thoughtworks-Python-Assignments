@@ -1,17 +1,21 @@
 
 
 input = input('Enter the color: ').upper()
-print(input)
+original = ['R','B','G']
 lst = list(input)
 sample = lst
-count =0
-
-
+count = 0
 
 for i in lst:
-    sample.remove(i)
-    for j in sample:
-        if j in i:
+    lst.remove(i)
+    for j in lst:
+        if i in j:
+
             count += 1
-print(count)
+
+if count == 3:
+    print('True')
+
+else:
+    print('False')
 
